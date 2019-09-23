@@ -71,6 +71,11 @@
             <artifactId>org.apache.karaf.log.core</artifactId>
             <version>${karaf.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -80,9 +85,13 @@
                 <configuration>
                     <instructions>
                         <Karaf-Commands>*</Karaf-Commands>
+                        <Embed-Dependency>
+                            log-sanitizer
+                        </Embed-Dependency>
                     </instructions>
                 </configuration>
-            </plugin><plugin>
+            </plugin>
+            <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <executions>

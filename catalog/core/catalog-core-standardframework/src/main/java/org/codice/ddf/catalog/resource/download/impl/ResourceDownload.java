@@ -33,6 +33,7 @@ import javax.ws.rs.core.Response.Status;
 import org.codice.ddf.catalog.resource.cache.ResourceCacheServiceMBean;
 import org.codice.ddf.catalog.resource.download.DownloadToLocalSiteException;
 import org.codice.ddf.catalog.resource.download.ResourceDownloadMBean;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,8 +82,8 @@ public class ResourceDownload implements ResourceDownloadMBean {
   public void copyToLocalSite(String sourceId, String metacardId) throws MBeanException {
     LOGGER.debug(
         "Downloading resource associated with metacard id [{}] from source [{}] to the local site.",
-        metacardId,
-        sourceId);
+        LogSanitizer.cleanAndEncode(metacardId),
+        LogSanitizer.cleanAndEncode(sourceId));
 
     ResourceRequest resourceRequest = new ResourceRequestById(metacardId);
 
@@ -96,26 +97,26 @@ public class ResourceDownload implements ResourceDownloadMBean {
     try {
       LOGGER.debug(
           "Attempting to download the resource associated with metacard [{}] from source [{}] to the local site.",
-          metacardId,
-          sourceId);
+          LogSanitizer.cleanAndEncode(metacardId),
+          LogSanitizer.cleanAndEncode(sourceId));
       ResourceResponse resourceResponse = catalogFramework.getResource(resourceRequest, sourceId);
 
       if (resourceResponse == null) {
         String message = String.format(ERROR_MESSAGE_TEMPLATE, metacardId, sourceId);
-        LOGGER.debug(message);
+        LOGGER.debug(LogSanitizer.cleanAndEncode(message));
         throw new MBeanException(
             new DownloadToLocalSiteException(Status.INTERNAL_SERVER_ERROR, message), message);
       }
     } catch (IOException | ResourceNotSupportedException e) {
       String message = String.format(ERROR_MESSAGE_TEMPLATE, metacardId, sourceId);
-      LOGGER.debug(message, e);
+      LOGGER.debug(LogSanitizer.cleanAndEncode(message), e);
       throw new MBeanException(
           new DownloadToLocalSiteException(Status.INTERNAL_SERVER_ERROR, message), message);
     } catch (ResourceNotFoundException e) {
       String message =
           String.format(ERROR_MESSAGE_TEMPLATE, metacardId, sourceId)
               + " The resource could not be found.";
-      LOGGER.debug(message, e);
+      LOGGER.debug(LogSanitizer.cleanAndEncode(message), e);
       throw new MBeanException(
           new DownloadToLocalSiteException(Status.NOT_FOUND, message), message);
     }

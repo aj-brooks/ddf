@@ -123,6 +123,11 @@
             <artifactId>ant-launcher</artifactId>
             <version>${ant.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -141,7 +146,8 @@
                             catalog-transformer-zip,
                             ddf-security-common,
                             platform-util-unavailableurls,
-                            platform-util
+                            platform-util,
+                            log-sanitizer
                         </Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
                         <Private-Package>

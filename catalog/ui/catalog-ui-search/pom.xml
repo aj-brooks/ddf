@@ -376,6 +376,11 @@
             <artifactId>catalog-rest-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -438,7 +443,8 @@
                             ows-v_1_1_0-schema,
                             jaxb2-basics-runtime,
                             catalog-rest-service,
-                            owasp-java-html-sanitizer
+                            owasp-java-html-sanitizer,
+                            log-sanitizer
                         </Embed-Dependency>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Import-Package>

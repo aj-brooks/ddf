@@ -62,6 +62,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 import org.codice.ddf.catalog.resource.download.DownloadException;
 import org.codice.ddf.configuration.SystemInfo;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -316,7 +317,9 @@ public class ResourceOperations extends DescribableImpl {
       resourceReq = processPreResourcePlugins(resourceReq);
 
       Map<String, Serializable> requestProperties = resourceReq.getProperties();
-      LOGGER.debug("Attempting to get resource from siteName: {}", resourceSiteName);
+      LOGGER.debug(
+          "Attempting to get resource from siteName: {}",
+          LogSanitizer.cleanAndEncode(resourceSiteName));
       // At this point we pull out the properties and use them.
       Serializable sourceIdProperty = requestProperties.get(ResourceRequest.SOURCE_ID);
       final String namedSource =
@@ -360,8 +363,12 @@ public class ResourceOperations extends DescribableImpl {
 
       // retrieve product from specified federated site if not in cache
       if (!resourceSourceName.equals(getId())) {
-        LOGGER.debug("Searching federatedSource {} for resource.", resourceSourceName);
-        LOGGER.debug("metacard for product found on source: {}", resolvedSourceId);
+        LOGGER.debug(
+            "Searching federatedSource {} for resource.",
+            LogSanitizer.cleanAndEncode(resourceSourceName));
+        LOGGER.debug(
+            "metacard for product found on source: {}",
+            LogSanitizer.cleanAndEncode(resolvedSourceId));
 
         final List<FederatedSource> sources =
             frameworkProperties
@@ -372,17 +379,23 @@ public class ResourceOperations extends DescribableImpl {
 
         if (!sources.isEmpty()) {
           if (sources.size() != 1) {
-            LOGGER.debug("Found multiple federatedSources for id: {}", resourceSourceName);
+            LOGGER.debug(
+                "Found multiple federatedSources for id: {}",
+                LogSanitizer.cleanAndEncode(resourceSourceName));
           }
           FederatedSource source = sources.get(0);
           LOGGER.debug("Adding federated site to federated query: {}", source.getId());
           LOGGER.debug("Retrieving product from remote source {}", source.getId());
           retriever = new RemoteResourceRetriever(source, responseURI, requestProperties);
         } else {
-          LOGGER.debug("Could not find federatedSource: {}", resourceSourceName);
+          LOGGER.debug(
+              "Could not find federatedSource: {}",
+              LogSanitizer.cleanAndEncode(resourceSourceName));
         }
       } else {
-        LOGGER.debug("Retrieving product from local source {}", resourceSourceName);
+        LOGGER.debug(
+            "Retrieving product from local source {}",
+            LogSanitizer.cleanAndEncode(resourceSourceName));
         retriever =
             new LocalResourceRetriever(
                 frameworkProperties.getResourceReaders(), responseURI, metacard, requestProperties);

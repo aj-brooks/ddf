@@ -58,6 +58,11 @@
             <groupId>ddf.security.core</groupId>
             <artifactId>security-core-api</artifactId>
         </dependency>
+        <dependency>
+           <groupId>ddf.lib</groupId>
+           <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -73,7 +78,8 @@
                             ant,
                             ant-launcher,
                             catalog-core-api-impl,
-                            platform-util
+                            platform-util,
+                            log-sanitizer
                         </Embed-Dependency>
                         <Export-Package />
                     </instructions>

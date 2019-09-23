@@ -49,6 +49,7 @@ import org.apache.cxf.sts.claims.ClaimsParameters;
 import org.apache.cxf.sts.claims.ProcessedClaim;
 import org.apache.cxf.sts.claims.ProcessedClaimCollection;
 import org.codice.ddf.configuration.SystemBaseUrl;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.security.SystemHighAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -219,7 +220,7 @@ public class UsersAttributesFileClaimsHandler implements ClaimsHandler, SystemHi
               "Expected system high user \"%s\" to contain a map of attributes",
               systemHighUserName);
       final String errorMessage = createErrorMessage(reason);
-      LOGGER.error(errorMessage);
+      LOGGER.error(LogSanitizer.cleanAndEncode(errorMessage));
       throw new IllegalStateException(reason);
     }
 

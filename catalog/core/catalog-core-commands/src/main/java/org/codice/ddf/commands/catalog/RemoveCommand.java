@@ -37,6 +37,7 @@ import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.Option;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.codice.ddf.commands.util.CatalogCommandException;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.geotools.filter.text.cql2.CQLException;
 import org.slf4j.LoggerFactory;
 
@@ -100,7 +101,8 @@ public class RemoveCommand extends CqlCommands {
     if (CollectionUtils.isNotEmpty(ids)) {
       getCacheProxy().removeById(ids.toArray(new String[0]));
       printSuccessMessage(ids + " successfully removed from cache");
-      LOGGER.info("{} removed from cache by catalog:remove command", ids);
+      LOGGER.info(
+          "{} removed from cache by catalog:remove command", LogSanitizer.cleanAndEncode(ids));
     }
 
     return null;

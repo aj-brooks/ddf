@@ -32,6 +32,7 @@ import javax.ws.rs.core.Response;
 import oasis.names.tc.ebxml_regrep.xsd.rim._3.RegistryPackageType;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminException;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
 import org.codice.ddf.registry.federationadmin.service.internal.RegistryPublicationService;
@@ -218,7 +219,7 @@ public class RegistryRestEndpoint {
       String message =
           String.format(
               "'%s' is an unknown section name. Valid Sections are: %s", section, validSections);
-      LOGGER.debug("{} For registry id: '{}'", message, registryId);
+      LOGGER.debug("{} For registry id: '{}'", LogSanitizer.cleanAndEncode(message), registryId);
       return Response.status(Response.Status.BAD_REQUEST)
           .entity(getErrorHtmlString(message))
           .build();
@@ -251,7 +252,7 @@ public class RegistryRestEndpoint {
       html = registryReportBuilder.getHtmlFromRegistryPackage(registryPackage, section);
     } catch (IOException e) {
       String message = String.format("Error when compiling and applying %s template.", section);
-      LOGGER.debug("{} For registry id: '{}'", message, registryId);
+      LOGGER.debug("{} For registry id: '{}'", LogSanitizer.cleanAndEncode(message), registryId);
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
           .entity(getErrorHtmlString(message))
           .build();
@@ -265,7 +266,7 @@ public class RegistryRestEndpoint {
       return registryReportBuilder.getErrorHtml(message);
     } catch (IOException e) {
       String errorMessage = "Error when compiling and applying error template.";
-      LOGGER.debug(message);
+      LOGGER.debug(LogSanitizer.cleanAndEncode(message));
       return errorMessage;
     }
   }

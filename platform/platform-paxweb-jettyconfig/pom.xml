@@ -106,7 +106,7 @@
                         <Embed-Dependency>
                             platform-util,
                             logback-core,
-                            logback-access
+                            logback-access,
                         </Embed-Dependency>
                         <Import-Package>
                             !org.apache.catalina,

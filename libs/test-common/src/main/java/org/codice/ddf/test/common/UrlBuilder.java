@@ -16,6 +16,7 @@ package org.codice.ddf.test.common;
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.apache.commons.lang3.StringUtils;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,13 +122,17 @@ public class UrlBuilder {
           new URL(
               String.format(
                   "https://%s:%s/%s", hostname, securePort, cleanContextPath(rootContext)));
-      LOGGER.debug("UrlBuilder created for {}, {}", rootContextUrl, secureRootContextUrl);
+      LOGGER.debug(
+          "UrlBuilder created for {}, {}",
+          LogSanitizer.cleanAndEncode(rootContextUrl.toString()),
+          LogSanitizer.cleanAndEncode(secureRootContextUrl.toString()));
+
     } catch (MalformedURLException e) {
       String message =
           String.format(
               "Cannot build valid URL using hostname %s, port %s and secure port %s",
               hostname, port, securePort);
-      LOGGER.error(message, e);
+      LOGGER.error(LogSanitizer.cleanAndEncode(message), e);
       throw new IllegalArgumentException(message, e);
     }
   }

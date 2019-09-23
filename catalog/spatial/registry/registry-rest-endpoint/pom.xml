@@ -89,6 +89,11 @@
             <version>${jsoup.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -104,7 +109,8 @@
                             antlr4-runtime,
                             commons-lang3,
                             catalog-core-api-impl;scope=!test,
-                            registry-common
+                            registry-common,
+                            log-sanitizer
                         </Embed-Dependency>
                         <Import-Package>
                             !org.codice.ddf.platform.util,

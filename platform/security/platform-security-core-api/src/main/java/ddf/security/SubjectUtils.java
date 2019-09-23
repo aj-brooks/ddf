@@ -43,6 +43,7 @@ import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -267,19 +268,24 @@ public final class SubjectUtils {
     Validate.notNull(key);
 
     if (subject == null) {
-      LOGGER.debug("Incoming subject was null, cannot look up {}.", key);
+      LOGGER.debug(
+          "Incoming subject was null, cannot look up {}.", LogSanitizer.cleanAndEncode(key));
       return Collections.emptyList();
     }
 
     PrincipalCollection principals = subject.getPrincipals();
     if (principals == null) {
-      LOGGER.debug("No principals located in the incoming subject, cannot look up {}.", key);
+      LOGGER.debug(
+          "No principals located in the incoming subject, cannot look up {}.",
+          LogSanitizer.cleanAndEncode(key));
       return Collections.emptyList();
     }
 
     Collection<SecurityAssertion> assertions = principals.byType(SecurityAssertion.class);
     if (assertions.isEmpty()) {
-      LOGGER.debug("Could not find Security Assertion, cannot look up {}.", key);
+      LOGGER.debug(
+          "Could not find Security Assertion, cannot look up {}.",
+          LogSanitizer.cleanAndEncode(key));
       return Collections.emptyList();
     }
 

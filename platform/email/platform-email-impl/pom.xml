@@ -71,8 +71,13 @@
         <dependency>
             <groupId>ddf.platform.util</groupId>
             <artifactId>platform-util</artifactId>
-        </dependency>
-    </dependencies>
+            </dependency>
+            <dependency>
+                <groupId>ddf.lib</groupId>
+                <artifactId>log-sanitizer</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -83,7 +88,8 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Embed-Dependency>
                             platform-util,
-                            org.apache.servicemix.bundles.jsr305
+                            org.apache.servicemix.bundles.jsr305,
+                            log-sanitizer
                         </Embed-Dependency>
                         <Export-Package />
                     </instructions>

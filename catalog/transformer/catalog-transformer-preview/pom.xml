@@ -74,6 +74,7 @@
                         </Embed-Dependency>
                         <Import-Package>
                             !org.codice.ddf.platform.util,
+                            !org.codice.ddf.log.sanitizer,
                             *
                         </Import-Package>
                     </instructions>

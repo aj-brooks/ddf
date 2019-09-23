@@ -33,6 +33,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.pac4j.oidc.profile.OidcProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -187,7 +188,8 @@ public class SecurityAssertionJwt implements SecurityAssertion {
         if (LOGGER.isDebugEnabled()) {
           LOGGER.debug(
               "Could not find username claim [{}] in jwt claims [{}]",
-              claim,
+              LogSanitizer.cleanAndEncode(claim),
+              LogSanitizer.cleanAndEncode(claim),
               String.join(",", attributes.keySet()),
               e);
         }

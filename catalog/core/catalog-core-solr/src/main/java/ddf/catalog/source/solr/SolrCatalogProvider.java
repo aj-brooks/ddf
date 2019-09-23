@@ -63,6 +63,7 @@ import org.apache.solr.client.solrj.response.SolrPingResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrException;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.solr.client.solrj.SolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -198,7 +199,10 @@ public class SolrCatalogProvider extends MaskableImpl implements CatalogProvider
 
   @Override
   public void maskId(String id) {
-    LOGGER.trace("Sitename changed from [{}] to [{}]", getId(), id);
+    LOGGER.trace(
+        "Sitename changed from [{}] to [{}]",
+        LogSanitizer.cleanAndEncode(getId()),
+        LogSanitizer.cleanAndEncode(id));
     super.maskId(id);
   }
 

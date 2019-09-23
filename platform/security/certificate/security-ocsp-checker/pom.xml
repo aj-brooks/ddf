@@ -64,6 +64,11 @@
             <version>${org.slf4j.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -75,7 +80,8 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Embed-Dependency>
                             alerts,
-                            platform-util
+                            platform-util,
+                            log-sanitizer
                         </Embed-Dependency>
                     </instructions>
                 </configuration>

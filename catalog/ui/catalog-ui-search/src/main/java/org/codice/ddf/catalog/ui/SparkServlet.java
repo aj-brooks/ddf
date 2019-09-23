@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.globalstate.ServletFlag;
@@ -206,8 +207,8 @@ public class SparkServlet extends HttpServlet {
     } catch (UnsupportedEncodingException ignore) {
       // this can't really ever happen
     }
+    LOGGER.debug("Relative path = {}", LogSanitizer.cleanAndEncode(path));
 
-    LOGGER.debug("Relative path = {}", path);
     return path;
   }
 
@@ -231,7 +232,7 @@ public class SparkServlet extends HttpServlet {
         LOGGER.debug(
             "Error converting {} to BiFunction<HttpServletRequest, String, HttpServletRequestWrapper>; "
                 + "falling back to default",
-            wrapperSupplierName,
+            LogSanitizer.cleanAndEncode(wrapperSupplierName),
             e);
       }
     }
@@ -267,7 +268,10 @@ public class SparkServlet extends HttpServlet {
         return SparkApplication.class.cast(appClass.newInstance());
       }
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-      LOGGER.debug("Error converting {} to SparkApplication", applicationClassName, e);
+      LOGGER.debug(
+          "Error converting {} to SparkApplication",
+          LogSanitizer.cleanAndEncode(applicationClassName),
+          e);
     }
 
     return null;

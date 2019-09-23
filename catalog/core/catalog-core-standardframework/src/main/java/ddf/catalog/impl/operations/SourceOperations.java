@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang.Validate;
 import org.codice.ddf.catalog.sourcepoller.SourcePoller;
 import org.codice.ddf.catalog.sourcepoller.SourceStatus;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -195,7 +196,8 @@ public class SourceOperations extends DescribableImpl {
           .forEach(
               e -> {
                 if (!ids.add(e)) {
-                  LOGGER.debug("Multiple FederatedSources found for id: {}", e);
+                  LOGGER.debug(
+                      "Multiple FederatedSources found for id: {}", LogSanitizer.cleanAndEncode(e));
                 }
               });
     }

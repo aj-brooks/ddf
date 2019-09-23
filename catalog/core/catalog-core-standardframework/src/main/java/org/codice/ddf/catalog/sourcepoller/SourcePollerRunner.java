@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +61,7 @@ abstract class SourcePollerRunner<V> extends PollerRunner<SourceKey, V> {
       if (map.put(sourceKey, () -> getCurrentValueForSource(source)) != null) {
         LOGGER.warn(
             "Duplicate key {}. The Pollers may not be reporting correct values for the matching Sources. Confirm that each Source has a unique id, and try restarting."
-                + sourceKey);
+                + LogSanitizer.cleanAndEncode(sourceKey.toString()));
       }
     }
     return ImmutableMap.copyOf(map);

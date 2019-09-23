@@ -80,6 +80,11 @@
             <groupId>ddf.catalog.core</groupId>
             <artifactId>catalog-core-api-impl</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -99,7 +104,8 @@
                         <Embed-Dependency>
                             platform-util,
                             catalog-core-api-impl,
-                            commons-lang3
+                            commons-lang3,
+                            log-sanitizer
                         </Embed-Dependency>
                     </instructions>
                 </configuration>

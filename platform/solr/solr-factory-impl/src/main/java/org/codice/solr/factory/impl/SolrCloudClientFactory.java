@@ -35,6 +35,7 @@ import org.apache.solr.client.solrj.request.CollectionAdminRequest;
 import org.apache.solr.client.solrj.response.CollectionAdminResponse;
 import org.apache.solr.common.SolrException;
 import org.apache.zookeeper.KeeperException;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.solr.factory.SolrClientFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +74,9 @@ public class SolrCloudClientFactory implements SolrClientFactory {
       throw new IllegalStateException("system property 'solr.cloud.zookeeper' is not configured");
     }
     LOGGER.debug(
-        "Solr({}): Creating a Solr Cloud client using Zookeeper hosts [{}]", core, zookeeperHosts);
+        "Solr({}): Creating a Solr Cloud client using Zookeeper hosts [{}]",
+        LogSanitizer.cleanAndEncode(core),
+        zookeeperHosts);
     return new SolrClientAdapter(core, () -> createSolrCloudClient(zookeeperHosts, core));
   }
 

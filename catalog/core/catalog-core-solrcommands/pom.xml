@@ -150,6 +150,11 @@
             <artifactId>solr-factory-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -171,7 +176,8 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Embed-Dependency>
                             platform-util,
-                            solr-factory-impl
+                            solr-factory-impl,
+                            log-sanitizer
                         </Embed-Dependency>
                         <Private-Package>
                             org.codice.ddf.commands.solr

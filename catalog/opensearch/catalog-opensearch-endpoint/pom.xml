@@ -85,6 +85,11 @@
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -105,7 +110,8 @@
                             parboiled-core,
                             asm,
                             asm-tree,
-                            asm-analysis
+                            asm-analysis,
+                            log-sanitizer
                         </Embed-Dependency>
                     </instructions>
                 </configuration>

@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.apache.karaf.system.SystemService;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,8 +84,8 @@ public class SecureBoot {
       String message =
           "ERROR: Unable to get real path for ddf.home [" + ddfHome + "]. Shutting down...";
       System.err.println("\n" + message + "\n");
-      LOGGER.error(message);
-      LOGGER.debug(message, e);
+      LOGGER.error(LogSanitizer.cleanAndEncode(message));
+      LOGGER.debug(LogSanitizer.cleanAndEncode(message), e);
       shutdown();
     }
     return ddfHome;
@@ -103,8 +104,8 @@ public class SecureBoot {
       String message =
           "ERROR: Unable to get real path for user.home [" + userHome + "]. Shutting down...";
       System.err.println("\n" + message + "\n");
-      LOGGER.error(message);
-      LOGGER.debug(message, e);
+      LOGGER.error(LogSanitizer.cleanAndEncode(message));
+      LOGGER.debug(LogSanitizer.cleanAndEncode(message), e);
       shutdown();
     }
     return userHome;

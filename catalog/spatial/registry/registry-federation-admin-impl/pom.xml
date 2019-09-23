@@ -101,6 +101,7 @@
                         <Import-Package>
                             !org.codice.ddf.platform.util.http,
                             !org.codice.ddf.platform.util,
+                            !org.codice.ddf.log.sanitizer,
                             *
                         </Import-Package>
                         <Export-Package />

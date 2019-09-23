@@ -20,6 +20,7 @@ import ddf.catalog.operation.ResourceResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Future;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,7 +91,9 @@ public class ReliableResourceInputStream extends InputStream {
 
   @Override
   public void close() throws IOException {
-    LOGGER.debug("ENTERING: close() - fbosBytesRead = {}", fbosBytesRead);
+    LOGGER.debug(
+        "ENTERING: close() - fbosBytesRead = {}",
+        LogSanitizer.cleanAndEncode(Long.toString(fbosBytesRead)));
     InputStream is = fbosByteSource.openStream();
     is.close();
 

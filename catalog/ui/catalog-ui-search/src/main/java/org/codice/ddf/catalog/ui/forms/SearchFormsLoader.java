@@ -45,6 +45,7 @@ import org.codice.ddf.catalog.ui.forms.data.AttributeGroupMetacard;
 import org.codice.ddf.catalog.ui.forms.data.QueryTemplateMetacard;
 import org.codice.ddf.catalog.ui.util.EndpointUtil;
 import org.codice.ddf.configuration.AbsolutePathResolver;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.security.common.Security;
 import org.codice.gsonsupport.GsonTypeAdapters.LongDoubleTypeAdapter;
 import org.slf4j.Logger;
@@ -129,7 +130,9 @@ public class SearchFormsLoader {
 
   public List<Metacard> retrieveSystemTemplateMetacards() {
     if (!formsDirectory.exists()) {
-      LOGGER.warn("Could not locate forms directory [{}]", formsDirectory.getAbsolutePath());
+      LOGGER.warn(
+          "Could not locate forms directory [{}]",
+          LogSanitizer.cleanAndEncode(formsDirectory.getAbsolutePath()));
       return Collections.emptyList();
     }
 
@@ -152,13 +155,13 @@ public class SearchFormsLoader {
   @SuppressWarnings("unchecked" /* Actually is checked, see early return if not a List */)
   private Stream<Metacard> loadFile(File file, Function<? super Map, Metacard> mapper) {
     if (!file.exists()) {
-      LOGGER.debug("Could not locate {}", file.getName());
+      LOGGER.debug("Could not locate {}", LogSanitizer.cleanAndEncode(file.getName()));
       return Stream.empty();
     }
 
     String payload = getFileContent(file);
     if (payload == null) {
-      LOGGER.debug("Problem reading {}", file.getName());
+      LOGGER.debug("Problem reading {}", LogSanitizer.cleanAndEncode(file.getName()));
       return Stream.empty();
     }
 
@@ -166,7 +169,7 @@ public class SearchFormsLoader {
     if (!(configObject instanceof List)) {
       LOGGER.warn(
           "Could not load forms configuration in {}, JSON should be a list of maps",
-          file.getName());
+          LogSanitizer.cleanAndEncode(file.getName()));
       return Stream.empty();
     }
 
@@ -246,8 +249,11 @@ public class SearchFormsLoader {
     try (InputStream is = new FileInputStream(file)) {
       return IOUtils.toString(is, "UTF-8");
     } catch (IOException e) {
-      LOGGER.error("Problem reading from {}, {}", file.getName(), e.getMessage());
-      LOGGER.debug("Problem reading from {}", file.getName(), e);
+      LOGGER.error(
+          "Problem reading from {}, {}",
+          LogSanitizer.cleanAndEncode(file.getName()),
+          e.getMessage());
+      LOGGER.debug("Problem reading from {}", LogSanitizer.cleanAndEncode(file.getName()), e);
     }
     return null;
   }

@@ -55,6 +55,7 @@ import javax.security.auth.AuthPermission;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.subject.ExecutionException;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.security.handler.api.BaseAuthenticationToken;
 import org.codice.ddf.security.handler.api.GuestAuthenticationToken;
 import org.codice.ddf.security.handler.api.STSAuthenticationTokenFactory;
@@ -233,12 +234,13 @@ public class Security {
         cert = keyStore.getCertificate(alias);
       }
     } catch (KeyStoreException e) {
-      LOGGER.warn("Unable to get certificate for alias [{}]", alias, e);
+      LOGGER.warn(
+          "Unable to get certificate for alias [{}]", LogSanitizer.cleanAndEncode(alias), e);
       return null;
     }
 
     if (cert == null) {
-      LOGGER.warn("Unable to get certificate for alias [{}]", alias);
+      LOGGER.warn("Unable to get certificate for alias [{}]", LogSanitizer.cleanAndEncode(alias));
       return null;
     }
 
@@ -438,7 +440,7 @@ public class Security {
     } catch (KeyStoreException e) {
       LOGGER.warn(
           "Unable to create keystore instance of type {}",
-          System.getProperty("javax.net.ssl.keyStoreType"),
+          LogSanitizer.cleanAndEncode(System.getProperty("javax.net.ssl.keyStoreType")),
           e);
       return null;
     }
@@ -453,7 +455,10 @@ public class Security {
     String keyStorePassword = System.getProperty("javax.net.ssl.keyStorePassword");
 
     if (!Files.isReadable(keyStoreFile)) {
-      LOGGER.warn("Unable to read system key/trust store files: [ {} ] ", keyStoreFile);
+      LOGGER.warn(
+          "Unable to read system key/trust store files: [ {} ] ",
+          LogSanitizer.cleanAndEncode(keyStoreFile.toString()));
+
       return null;
     }
 

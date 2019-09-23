@@ -187,6 +187,11 @@
             <artifactId>catalog-rest-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -206,7 +211,8 @@
                             owasp-java-html-sanitizer,
                             platform-util,
                             asm,
-                            json-smart
+                            json-smart,
+                            log-sanitizer
                         </Embed-Dependency>
                     </instructions>
                 </configuration>

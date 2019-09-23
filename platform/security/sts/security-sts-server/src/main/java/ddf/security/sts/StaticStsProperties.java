@@ -75,6 +75,7 @@ import org.apache.wss4j.common.crypto.Crypto;
 import org.apache.wss4j.common.crypto.CryptoFactory;
 import org.apache.wss4j.common.ext.WSSecurityException;
 import org.apache.wss4j.dom.engine.WSSConfig;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -275,7 +276,7 @@ public class StaticStsProperties extends StaticSTSProperties {
   @Override
   public void setSignatureUsername(String signatureUsername) {
     this.signatureUsername = signatureUsername;
-    LOGGER.debug("Setting signatureUsername: {}", signatureUsername);
+    LOGGER.debug("Setting signatureUsername: {}", LogSanitizer.cleanAndEncode(signatureUsername));
   }
 
   /**
@@ -341,7 +342,7 @@ public class StaticStsProperties extends StaticSTSProperties {
   @Override
   public void setEncryptionUsername(String encryptionUsername) {
     this.encryptionUsername = encryptionUsername;
-    LOGGER.debug("Setting encryptionUsername: {}", encryptionUsername);
+    LOGGER.debug("Setting encryptionUsername: {}", LogSanitizer.cleanAndEncode(encryptionUsername));
   }
 
   /**
@@ -383,7 +384,7 @@ public class StaticStsProperties extends StaticSTSProperties {
   @Override
   public void setIssuer(String issuer) {
     this.issuer = issuer;
-    LOGGER.debug("Setting issuer: {}", issuer);
+    LOGGER.debug("Setting issuer: {}", LogSanitizer.cleanAndEncode(issuer));
   }
 
   /**

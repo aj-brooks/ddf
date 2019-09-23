@@ -124,6 +124,11 @@
             <artifactId>nimbus-jose-jwt</artifactId>
             <version>${nimbus.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>

@@ -28,6 +28,7 @@ import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.commons.io.IOUtils;
 import org.apache.ws.commons.schema.XmlSchema;
 import org.apache.ws.commons.schema.XmlSchemaCollection;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.spatial.ogc.wfs.catalog.source.WfsUriResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +80,8 @@ public class XmlSchemaMessageBodyReader implements MessageBodyReader<XmlSchema> 
       schema = schemaCollection.read(new InputSource(inStream));
       return schema;
     }
-    LOGGER.debug("Did not receive valid XML Schema, instead got: \n{}", input);
+    LOGGER.debug(
+        "Did not receive valid XML Schema, instead got: \n{}", LogSanitizer.cleanAndEncode(input));
     return null;
   }
 }

@@ -32,6 +32,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.IOUtils;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,7 +121,8 @@ public class ZipDecompression implements InputCollectionTransformer {
     try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file))) {
       result = (Metacard) objectInputStream.readObject();
     } catch (IOException | IllegalArgumentException | ClassNotFoundException e) {
-      LOGGER.debug("Unable to create metacard from file {}", file.getName(), e);
+      LOGGER.debug(
+          "Unable to create metacard from file {}", LogSanitizer.cleanAndEncode(file.getName()), e);
     }
     return result;
   }

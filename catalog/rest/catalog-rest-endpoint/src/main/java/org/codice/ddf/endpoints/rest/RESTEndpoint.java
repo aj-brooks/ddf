@@ -44,6 +44,7 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.rest.api.CatalogService;
 import org.codice.ddf.rest.api.CatalogServiceException;
 import org.slf4j.Logger;
@@ -400,7 +401,7 @@ public class RESTEndpoint implements RESTService {
     }
 
     if (StringUtils.isNotBlank(filename)) {
-      LOGGER.debug("filename: {}", filename);
+      LOGGER.debug("filename: {}", LogSanitizer.cleanAndEncode(filename));
       responseBuilder.header(HEADER_CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"");
     }
   }

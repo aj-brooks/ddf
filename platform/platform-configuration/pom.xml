@@ -98,6 +98,10 @@
                         <Embed-Dependency>
                             json-smart,org.apache.felix.utils,commons-lang3,asm
                         </Embed-Dependency>
+                        <Import-Package>
+                            !org.codice.ddf.log.sanitizer,
+                            *
+                        </Import-Package>
                         <Export-Package />
                     </instructions>
                 </configuration>

@@ -31,6 +31,7 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import org.apache.commons.lang.StringUtils;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.platform.email.SmtpClient;
 import org.codice.ddf.platform.util.StandardThreadFactoryBuilder;
 import org.slf4j.Logger;
@@ -112,7 +113,6 @@ public class SmtpClientImpl implements SmtpClient {
   public Session createSession() {
 
     Properties properties = new Properties();
-
     if (hostName == null) {
       throw new IllegalArgumentException("Hostname cannot be null for smtp client.");
     }
@@ -141,7 +141,8 @@ public class SmtpClientImpl implements SmtpClient {
           try {
             Transport.send(message);
           } catch (MessagingException e) {
-            LOGGER.debug("Could not send message {}", message, e);
+            LOGGER.debug(
+                "Could not send message {}", LogSanitizer.cleanAndEncode(message.toString()), e);
             return null;
           } finally {
             Thread.currentThread().setContextClassLoader(classLoader);

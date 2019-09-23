@@ -29,6 +29,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import org.apache.commons.lang.Validate;
 import org.codice.ddf.configuration.SystemBaseUrl;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,7 +97,7 @@ public class OverlayActionProvider implements ActionProvider {
         LOGGER.debug("Error constructing URL", e);
       }
     } else {
-      LOGGER.debug("Cannot handle the input [{}]", subject);
+      LOGGER.debug("Cannot handle the input [{}]", LogSanitizer.cleanAndEncode(subject.toString()));
     }
 
     return null;

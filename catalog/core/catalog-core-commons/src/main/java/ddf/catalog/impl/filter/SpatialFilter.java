@@ -16,6 +16,7 @@ package ddf.catalog.impl.filter;
 import com.vividsolutions.jts.io.WKTReader;
 import java.text.ParseException;
 import java.util.Locale;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.geotools.geometry.GeometryBuilder;
 import org.geotools.geometry.jts.spatialschema.geometry.primitive.PrimitiveFactoryImpl;
 import org.geotools.geometry.text.WKTParser;
@@ -73,9 +74,15 @@ public class SpatialFilter {
       }
 
     } catch (ParseException e) {
-      LOGGER.debug("Unable to compute geometry for WKT = {}", this.geometryWkt, e);
+      LOGGER.debug(
+          "Unable to compute geometry for WKT = {}",
+          LogSanitizer.cleanAndEncode(this.geometryWkt),
+          e);
     } catch (com.vividsolutions.jts.io.ParseException e) {
-      LOGGER.debug("Unable to read multi geometry for WKT = {}", this.geometryWkt, e);
+      LOGGER.debug(
+          "Unable to read multi geometry for WKT = {}",
+          LogSanitizer.cleanAndEncode(this.geometryWkt),
+          e);
     }
 
     return geometry;

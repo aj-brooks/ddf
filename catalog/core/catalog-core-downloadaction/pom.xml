@@ -58,6 +58,11 @@
             <artifactId>common-system</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -71,7 +76,8 @@
                             catalog-core-actions, 
                             commons-lang3,
                             handlebars,
-                            antlr4-runtime
+                            antlr4-runtime,
+                            log-sanitizer
                         </Embed-Dependency>
                         <Import-Package>
                             !org.abego.treelayout.*,

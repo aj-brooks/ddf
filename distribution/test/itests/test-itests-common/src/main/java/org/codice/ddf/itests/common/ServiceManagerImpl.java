@@ -50,6 +50,7 @@ import org.apache.karaf.features.Feature;
 import org.apache.karaf.features.FeatureState;
 import org.apache.karaf.features.FeaturesService;
 import org.codice.ddf.admin.core.api.Service;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -668,10 +669,10 @@ public class ServiceManagerImpl implements ServiceManager {
         logConsumer.accept(
             "\n\tBundle: {}_v{} | {}\n\tHeaders: {}",
             new Object[] {
-              bundle.getSymbolicName(),
+              LogSanitizer.cleanAndEncode(bundle.getSymbolicName()),
               bundle.getVersion(),
               BUNDLE_STATES.getOrDefault(bundle.getState(), "UNKNOWN"),
-              headerString
+              LogSanitizer.cleanAndEncode(headerString.toString())
             });
       }
     }

@@ -124,6 +124,11 @@
             <artifactId>platform-util-unavailableurls</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -149,7 +154,8 @@
                             google-http-client,
                             ddf-security-common,
                             platform-util,
-                            platform-util-unavailableurls
+                            platform-util-unavailableurls,
+                            log-sanitizer
                         </Embed-Dependency>
                     </instructions>
                 </configuration>

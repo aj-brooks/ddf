@@ -34,6 +34,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.codice.ddf.configuration.AbsolutePathResolver;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -175,7 +176,7 @@ public final class PropertiesLoader {
     try {
       LOGGER.debug(
           "Attempting to load properties from {} with Spring PropertiesLoaderUtils.",
-          propertiesFile);
+          LogSanitizer.cleanAndEncode(propertiesFile));
       properties = PropertiesLoaderUtils.loadAllProperties(propertiesFile);
     } catch (IOException e) {
       LOGGER.debug("Unable to load properties using default Spring properties loader.", e);
@@ -191,7 +192,7 @@ public final class PropertiesLoader {
     try {
       LOGGER.debug(
           "Attempting to load properties from {} with Spring PropertiesLoaderUtils with class loader.",
-          propertiesFile);
+          LogSanitizer.cleanAndEncode(propertiesFile));
       if (classLoader != null) {
         properties = PropertiesLoaderUtils.loadAllProperties(propertiesFile, classLoader);
       } else {
@@ -215,7 +216,9 @@ public final class PropertiesLoader {
   @SuppressWarnings("squid:S1172" /* Used in bi-function */)
   @VisibleForTesting
   static Properties attemptLoadWithFileSystem(String propertiesFile, ClassLoader classLoader) {
-    LOGGER.debug("Attempting to load properties from file system: {}", propertiesFile);
+    LOGGER.debug(
+        "Attempting to load properties from file system: {}",
+        LogSanitizer.cleanAndEncode(propertiesFile));
     Properties properties = new Properties();
 
     String karafHome = System.getProperty("karaf.home");
@@ -236,13 +239,21 @@ public final class PropertiesLoader {
           new InputStreamReader(new FileInputStream(propFile), StandardCharsets.UTF_8)) {
         properties.load(reader);
       } catch (FileNotFoundException e) {
-        LOGGER.debug("Could not find properties file: {}", propFile.getAbsolutePath(), e);
+        LOGGER.debug(
+            "Could not find properties file: {}",
+            LogSanitizer.cleanAndEncode(propFile.getAbsolutePath()),
+            e);
       } catch (IOException e) {
-        LOGGER.debug("Error reading properties file: {}", propFile.getAbsolutePath(), e);
+        LOGGER.debug(
+            "Error reading properties file: {}",
+            LogSanitizer.cleanAndEncode(propFile.getAbsolutePath()),
+            e);
         properties.clear();
       }
     } else {
-      LOGGER.debug("Could not find properties file: {}", propFile.getAbsolutePath());
+      LOGGER.debug(
+          "Could not find properties file: {}",
+          LogSanitizer.cleanAndEncode(propFile.getAbsolutePath()));
     }
 
     return properties;
@@ -252,14 +263,17 @@ public final class PropertiesLoader {
   @SuppressWarnings("squid:S1172" /* Used in bi-function */)
   @VisibleForTesting
   static Properties attemptLoadAsResource(String propertiesFile, ClassLoader classLoader) {
-    LOGGER.debug("Attempting to load properties as a resource: {}", propertiesFile);
+    LOGGER.debug(
+        "Attempting to load properties as a resource: {}",
+        LogSanitizer.cleanAndEncode(propertiesFile));
     InputStream ins = PropertiesLoader.class.getResourceAsStream(propertiesFile);
     Properties properties = new Properties();
     if (ins != null) {
       try {
         properties.load(ins);
       } catch (IOException e) {
-        LOGGER.debug("Unable to load properties: {}", propertiesFile, e);
+        LOGGER.debug(
+            "Unable to load properties: {}", LogSanitizer.cleanAndEncode(propertiesFile), e);
       } finally {
         IOUtils.closeQuietly(ins);
       }

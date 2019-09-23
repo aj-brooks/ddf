@@ -42,6 +42,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,10 +124,13 @@ class Poller<K, V> {
     if (cachedValue == null) {
       LOGGER.debug(
           "{} is unknown. This only happens for keys that have not yet successfully completed a poll yet. Returning \"unknown\"",
-          key);
+          LogSanitizer.cleanAndEncode(key.toString()));
       return Optional.empty();
     } else {
-      LOGGER.trace("The cached value for {} is {}", key, cachedValue);
+      LOGGER.trace(
+          "The cached value for {} is {}",
+          LogSanitizer.cleanAndEncode(key.toString()),
+          LogSanitizer.cleanAndEncode(cachedValue.toString()));
       return Optional.of(cachedValue);
     }
   }
@@ -387,7 +391,7 @@ class Poller<K, V> {
     } catch (TimeoutException e) {
       LOGGER.debug(
           "The loader for {} did not complete within {} {}. Cancelling the loader task",
-          key,
+          LogSanitizer.cleanAndEncode(key.toString()),
           timeout,
           timeoutTimeUnit);
       loaderFuture.cancel(true);

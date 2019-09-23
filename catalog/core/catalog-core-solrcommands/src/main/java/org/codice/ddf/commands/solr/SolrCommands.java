@@ -42,6 +42,7 @@ import org.apache.solr.client.solrj.response.CollectionAdminResponse;
 import org.apache.solr.client.solrj.response.RequestStatusState;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.util.NamedList;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.Ansi.Color;
 import org.osgi.service.cm.ConfigurationAdmin;
@@ -118,7 +119,7 @@ public abstract class SolrCommands implements Action {
   protected SolrClient getCloudSolrClient() {
     String zkHosts = System.getProperty(ZOOKEEPER_HOSTS_PROP);
     String solrUrl = System.getProperty(SOLR_URL_PROP);
-    LOGGER.debug("Zookeeper hosts: {}", zkHosts);
+    LOGGER.debug("Zookeeper hosts: {}", LogSanitizer.cleanAndEncode(zkHosts));
 
     if (StringUtils.isNotBlank(zkHosts)) {
       String[] zkHostArr = zkHosts.split(",");
@@ -147,7 +148,7 @@ public abstract class SolrCommands implements Action {
 
   protected boolean isSystemConfiguredWithSolrCloud() {
     String solrClientType = System.getProperty(SOLR_CLIENT_PROP);
-    LOGGER.debug("Solr client type: {}", solrClientType);
+    LOGGER.debug("Solr client type: {}", LogSanitizer.cleanAndEncode(solrClientType));
     if (solrClientType != null) {
       return StringUtils.equals(solrClientType, CLOUD_SOLR_CLIENT_TYPE);
     } else {

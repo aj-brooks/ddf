@@ -105,6 +105,11 @@
           <groupId>com.google.guava</groupId>
           <artifactId>guava</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -119,7 +124,8 @@
                             httpclient,httpcore,
                             platform-util-unavailableurls,
                             ddf-security-common,
-                            platform-util
+                            platform-util,
+                            log-sanitizer
                         </Embed-Dependency>
                         <Import-Package>
                             javax.net.ssl,

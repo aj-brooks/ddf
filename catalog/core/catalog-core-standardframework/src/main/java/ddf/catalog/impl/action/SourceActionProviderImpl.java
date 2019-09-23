@@ -19,6 +19,7 @@ import ddf.action.impl.ActionImpl;
 import ddf.catalog.source.Source;
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,7 +95,7 @@ public class SourceActionProviderImpl implements ActionProvider {
     try {
       return new ActionImpl(getId(), title, description, new URL(constructUrl()));
     } catch (MalformedURLException e) {
-      LOGGER.debug("Unable to parse the action url: url={}", url, e);
+      LOGGER.debug("Unable to parse the action url: url={}", LogSanitizer.cleanAndEncode(url), e);
       return null;
     }
   }

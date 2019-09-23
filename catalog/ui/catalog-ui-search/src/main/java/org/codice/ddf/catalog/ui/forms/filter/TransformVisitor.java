@@ -22,6 +22,7 @@ import org.codice.ddf.catalog.ui.forms.api.FilterNode;
 import org.codice.ddf.catalog.ui.forms.api.FilterVisitor2;
 import org.codice.ddf.catalog.ui.forms.api.FlatFilterBuilder;
 import org.codice.ddf.catalog.ui.forms.api.VisitableElement;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,7 +113,7 @@ public class TransformVisitor<T> extends AbstractFilterVisitor2 {
   public void visitFunctionType(VisitableElement<Map<String, Object>> visitable) {
     traceName(visitable);
     Map<String, Object> args = visitable.getValue();
-    if (LOGGER.isTraceEnabled()) {
+    if (LOGGER.isTraceEnabled()) {	    args.forEach((key, value) -> LOGGER.trace("Key: {} | Value: {}", key, value));
       args.forEach((key, value) -> LOGGER.trace("Key: {} | Value: {}", key, value));
     }
 
@@ -170,6 +171,6 @@ public class TransformVisitor<T> extends AbstractFilterVisitor2 {
   }
 
   private static void traceName(VisitableElement element) {
-    LOGGER.trace("LocalPart: {}", element.getName());
+    LOGGER.trace("LocalPart: {}", LogSanitizer.cleanAndEncode(element.getName()));
   }
 }

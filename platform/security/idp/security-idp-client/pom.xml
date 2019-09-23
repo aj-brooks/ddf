@@ -208,7 +208,8 @@
                             platform-util-unavailableurls,
                             platform-util,
                             httpclient,
-                            httpcore
+                            httpcore,
+                            log-sanitizer
                         </Embed-Dependency>
                     </instructions>
                 </configuration>

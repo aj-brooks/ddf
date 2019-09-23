@@ -116,7 +116,7 @@
         <dependency>
             <groupId>ddf.lib</groupId>
             <artifactId>log-sanitizer</artifactId>
-            <version>2.18.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -132,7 +132,8 @@
                             platform-util,
                             org.apache.felix.utils,
                             gson-support,
-                            alerts
+                            alerts,
+                            log-sanitizer
                         </Embed-Dependency>
                         <Private-Package>
                             com.github.drapostolos.typeparser,

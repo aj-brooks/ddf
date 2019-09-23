@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -181,7 +182,9 @@ public class ReliableResourceCallable implements Callable<ReliableResourceStatus
     // Set caching status here because it takes time for the Future running this
     // Callable to be canceled and the ReliableResourceStatus may be retrieved before
     // the call() method is interrupted
-    LOGGER.debug("Download canceled - returning {} bytes read", bytesRead);
+    LOGGER.debug(
+        "Download canceled - returning {} bytes read",
+        LogSanitizer.cleanAndEncode(bytesRead.toString()));
     reliableResourceStatus =
         new ReliableResourceStatus(DownloadStatus.RESOURCE_DOWNLOAD_CANCELED, bytesRead.get());
     reliableResourceStatus.setMessage("Download canceled - returning " + bytesRead + " bytes read");

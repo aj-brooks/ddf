@@ -75,6 +75,7 @@ import org.codice.ddf.configuration.SystemBaseUrl;
 import org.codice.ddf.cxf.client.SecureCxfClientFactory;
 import org.codice.ddf.cxf.paos.PaosInInterceptor;
 import org.codice.ddf.cxf.paos.PaosOutInterceptor;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.security.common.jaxrs.RestSecurity;
 import org.opensaml.core.config.ConfigurationService;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistry;
@@ -498,7 +499,7 @@ public class SecureCxfClientFactoryImpl<T> implements SecureCxfClientFactory<T> 
     } catch (KeyStoreException e) {
       LOGGER.debug(
           "Unable to create keystore instance of type {}",
-          System.getProperty(SecurityConstants.KEYSTORE_TYPE),
+          LogSanitizer.cleanAndEncode(System.getProperty(SecurityConstants.KEYSTORE_TYPE)),
           e);
     }
     Path keyStoreFile;
@@ -524,8 +525,8 @@ public class SecureCxfClientFactoryImpl<T> implements SecureCxfClientFactory<T> 
     if (!Files.isReadable(keyStoreFile) || !Files.isReadable(trustStoreFile)) {
       LOGGER.debug(
           "Unable to read system key/trust store files: [ {} ] [ {} ]",
-          keyStoreFile,
-          trustStoreFile);
+          LogSanitizer.cleanAndEncode(keyStoreFile.toString()),
+          LogSanitizer.cleanAndEncode(trustStoreFile.toString()));
       return;
     }
     try (InputStream kfis = Files.newInputStream(keyStoreFile)) {
@@ -566,7 +567,10 @@ public class SecureCxfClientFactoryImpl<T> implements SecureCxfClientFactory<T> 
     }
 
     if (keyInfo != null) {
-      LOGGER.trace("Using keystore file: {}, alias: {}", keyStoreFile, keyInfo.getAlias());
+      LOGGER.trace(
+          "Using keystore file: {}, alias: {}",
+          LogSanitizer.cleanAndEncode(keyStoreFile.toString()),
+          LogSanitizer.cleanAndEncode(keyInfo.getAlias()));
       tlsParams.setUseHttpsURLConnectionDefaultSslSocketFactory(false);
       tlsParams.setCertAlias(keyInfo.getAlias());
       try {

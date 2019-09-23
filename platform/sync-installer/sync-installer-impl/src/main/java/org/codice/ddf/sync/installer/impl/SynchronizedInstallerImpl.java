@@ -36,6 +36,7 @@ import org.apache.karaf.bundle.core.BundleState;
 import org.apache.karaf.features.BootFinished;
 import org.apache.karaf.features.Feature;
 import org.apache.karaf.features.FeaturesService;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.sync.installer.api.SynchronizedInstaller;
 import org.codice.ddf.sync.installer.api.SynchronizedInstallerException;
 import org.codice.ddf.sync.installer.api.SynchronizedInstallerTimeoutException;
@@ -190,7 +191,8 @@ public class SynchronizedInstallerImpl implements SynchronizedInstaller {
     Callable<Boolean> isServiceUpdated =
         () -> {
           LOGGER.trace(
-              "Waiting for service with pid [{}] to reflect configuration updates...", servicePid);
+              "Waiting for service with pid [{}] to reflect configuration updates...",
+              LogSanitizer.cleanAndEncode(servicePid));
           return listener.isUpdated();
         };
 
@@ -236,7 +238,9 @@ public class SynchronizedInstallerImpl implements SynchronizedInstaller {
 
     Callable<Boolean> isServiceAvailable =
         () -> {
-          LOGGER.trace("Waiting for service with pid [{}] to be registered", servicePid);
+          LOGGER.trace(
+              "Waiting for service with pid [{}] to be registered",
+              LogSanitizer.cleanAndEncode(servicePid));
           return st.getService() != null;
         };
 

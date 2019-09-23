@@ -44,6 +44,7 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codice.ddf.configuration.SystemInfo;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.opensearch.OpenSearch;
 import org.codice.ddf.opensearch.OpenSearchConstants;
 import org.codice.ddf.opensearch.endpoint.query.OpenSearchQuery;
@@ -186,7 +187,7 @@ public class OpenSearchEndpoint implements OpenSearch {
                   + framework.getId()
                   + ".");
         } else {
-          LOGGER.trace("Querying site set: {}", siteSet);
+          LOGGER.trace("Querying site set: {}", LogSanitizer.cleanAndEncode(siteSet.toString()));
           query.setSiteIds(siteSet);
         }
 
@@ -264,26 +265,27 @@ public class OpenSearchEndpoint implements OpenSearch {
       String lat,
       String lon) {
     if (StringUtils.isNotBlank(geometry)) {
-      LOGGER.trace("Adding SpatialCriterion geometry: {}", geometry);
+      LOGGER.trace("Adding SpatialCriterion geometry: {}", LogSanitizer.cleanAndEncode(geometry));
       query.addGeometrySpatialFilter(geometry.trim());
     }
 
     if (StringUtils.isNotBlank(bbox)) {
-      LOGGER.trace("Adding SpatialCriterion bbox: {}", bbox);
+      LOGGER.trace("Adding SpatialCriterion bbox: {}", LogSanitizer.cleanAndEncode(bbox));
       query.addBBoxSpatialFilter(bbox.trim());
     }
 
     if (StringUtils.isNotBlank(polygon)) {
-      LOGGER.trace("Adding SpatialCriterion polygon: {}", polygon);
+      LOGGER.trace("Adding SpatialCriterion polygon: {}", LogSanitizer.cleanAndEncode(polygon));
       query.addPolygonSpatialFilter(polygon.trim());
     }
 
     if (StringUtils.isNotBlank(lat) && StringUtils.isNotBlank(lon)) {
       if (StringUtils.isBlank(radius)) {
+
         LOGGER.trace("Adding default radius {}", DEFAULT_RADIUS);
         query.addPointRadiusSpatialFilter(lon.trim(), lat.trim(), DEFAULT_RADIUS);
       } else {
-        LOGGER.trace("Using radius: {}", radius);
+        LOGGER.trace("Using radius: {}", LogSanitizer.cleanAndEncode(radius));
         query.addPointRadiusSpatialFilter(lon.trim(), lat.trim(), radius.trim());
       }
     }
@@ -305,16 +307,13 @@ public class OpenSearchEndpoint implements OpenSearch {
     MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
     List<String> subscriptionList = queryParams.get(Constants.SUBSCRIPTION_KEY);
 
-    LOGGER.trace("Attempting to execute query: {}", query);
+    LOGGER.trace("Attempting to execute query: {}", LogSanitizer.cleanAndEncode(query.toString()));
     try {
       Map<String, Serializable> arguments = new HashMap<>();
       String organization = framework.getOrganization();
       String url = ui.getRequestUri().toString();
-      if (LOGGER.isTraceEnabled()) {
-        LOGGER.trace("organization: {}", organization);
-        LOGGER.trace("url: {}", url);
-      }
-
+      LOGGER.trace("organization: {}", organization);
+      LOGGER.trace("url: {}", url);
       arguments.put("organization", organization);
       arguments.put("url", url);
 

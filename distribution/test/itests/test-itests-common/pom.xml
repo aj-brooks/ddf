@@ -132,6 +132,11 @@
             <artifactId>test-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -196,7 +201,8 @@
                             catalog-core-api-impl,
                             common,
                             pax-exam-container-karaf,
-                            platform-util
+                            platform-util,
+                            log-sanitizer
                         </Embed-Dependency>
                     </instructions>
                 </configuration>

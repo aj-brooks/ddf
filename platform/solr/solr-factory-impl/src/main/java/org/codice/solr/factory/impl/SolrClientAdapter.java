@@ -45,6 +45,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.SolrPingResponse;
 import org.apache.solr.common.SolrException;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.platform.util.StandardThreadFactoryBuilder;
 import org.codice.solr.client.solrj.UnavailableSolrException;
 import org.slf4j.Logger;
@@ -349,13 +350,11 @@ public final class SolrClientAdapter extends SolrClientProxy
     // very close to a short-circuit.
     final boolean available = (state == State.CONNECTED);
 
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug(
-          "Solr({}): current availability is [{} = {}]",
-          core,
-          state,
-          SolrClientAdapter.availableToString(available));
-    }
+    LOGGER.debug(
+        "Solr({}): current availability is [{} = {}]",
+        core,
+        state,
+        SolrClientAdapter.availableToString(available));
     if (available && wasNotRecent(lastPing, SolrClientAdapter.PING_MIN_FREQUENCY)) {
       LOGGER.debug(
           "Solr({}): Proxy is starting a background task to ping the client because the last ping was too long ago",
@@ -390,12 +389,10 @@ public final class SolrClientAdapter extends SolrClientProxy
         if (timeRemaining <= 0L) { // we timed out
           return false;
         }
-        if (LOGGER.isDebugEnabled()) {
-          LOGGER.debug(
-              "Solr({}): waiting {} to become available",
-              core,
-              DurationFormatUtils.formatDurationHMS(TimeUnit.NANOSECONDS.toMillis(timeRemaining)));
-        }
+        LOGGER.debug(
+            "Solr({}): waiting {} to become available",
+            core,
+            DurationFormatUtils.formatDurationHMS(TimeUnit.NANOSECONDS.toMillis(timeRemaining)));
         now = waiter.timedWait(lock, now, timeRemaining, TimeUnit.NANOSECONDS);
       }
     }
@@ -410,13 +407,11 @@ public final class SolrClientAdapter extends SolrClientProxy
     } // else - notify the listener at least once
     final boolean available = isAvailable();
 
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug(
-          "Solr({}): starting a background task to notify a new listener [{}] that the availability is [{}]",
-          core,
-          listener,
-          SolrClientAdapter.availableToString(available));
-    }
+    LOGGER.debug(
+        "Solr({}): starting a background task to notify a new listener [{}] that the availability is [{}]",
+        core,
+        listener,
+        SolrClientAdapter.availableToString(available));
     executor.submit(() -> notifyAvailability(listener, "is"));
     return available;
   }
@@ -791,13 +786,17 @@ public final class SolrClientAdapter extends SolrClientProxy
 
   @SuppressWarnings("squid:S1181" /* bubbling out VirtualMachineError */)
   private SolrPingResponse ping(String how) throws SolrServerException, IOException {
-    LOGGER.debug("Solr({}): pinging the client {}", core, how);
+    LOGGER.debug(
+        "Solr({}): pinging the client {}",
+        LogSanitizer.cleanAndEncode(core),
+        LogSanitizer.cleanAndEncode(how));
     try {
       lastPing.set(System.currentTimeMillis());
       final SolrPingResponse response = pingClient.ping();
 
       if (response == null) {
-        LOGGER.debug(SolrClientAdapter.FAILED_TO_PING, core, "null response");
+        LOGGER.debug(
+            SolrClientAdapter.FAILED_TO_PING, LogSanitizer.cleanAndEncode(core), "null response");
         setConnecting(
             realClient,
             new UnavailableSolrClient(new UnavailableSolrException("ping failed with no response")),
@@ -810,7 +809,10 @@ public final class SolrClientAdapter extends SolrClientProxy
       if (SolrClientAdapter.OK_STATUS.equals(status)) {
         setConnected(true);
       } else {
-        LOGGER.debug(SolrClientAdapter.FAILED_TO_PING_WITH_STATUS, core, status);
+        LOGGER.debug(
+            SolrClientAdapter.FAILED_TO_PING_WITH_STATUS,
+            LogSanitizer.cleanAndEncode(core),
+            LogSanitizer.cleanAndEncode(status.toString()));
         setConnecting(
             realClient,
             new UnavailableSolrClient(
@@ -822,8 +824,11 @@ public final class SolrClientAdapter extends SolrClientProxy
     } catch (UnavailableSolrException | VirtualMachineError e) {
       throw e;
     } catch (Throwable t) {
-      LOGGER.debug(SolrClientAdapter.FAILED_TO_PING, core, t, t);
-      setConnecting(realClient, new UnavailableSolrClient(t), true, State.CONNECTED);
+      LOGGER.debug(
+          SolrClientAdapter.FAILED_TO_PING,
+          core,
+          LogSanitizer.cleanAndEncode(t.toString()),
+          LogSanitizer.cleanAndEncode(t.toString()));
       throw t;
     }
   }

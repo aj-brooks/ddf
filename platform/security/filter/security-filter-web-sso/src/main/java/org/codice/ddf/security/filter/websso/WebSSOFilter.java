@@ -31,6 +31,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.platform.filter.AuthenticationChallengeException;
 import org.codice.ddf.platform.filter.AuthenticationException;
 import org.codice.ddf.platform.filter.AuthenticationFailureException;
@@ -65,15 +66,13 @@ public class WebSSOFilter implements SecurityFilter {
 
   @Override
   public void init() {
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("handlerList size is {}", handlerList.size());
+    LOGGER.debug("handlerList size is {}", handlerList.size());
 
-      for (AuthenticationHandler authenticationHandler : handlerList) {
-        LOGGER.debug(
-            "AuthenticationHandler type: {}, class: {}",
-            authenticationHandler.getAuthenticationType(),
-            authenticationHandler.getClass().getSimpleName());
-      }
+    for (AuthenticationHandler authenticationHandler : handlerList) {
+      LOGGER.debug(
+          "AuthenticationHandler type: {}, class: {}",
+          authenticationHandler.getAuthenticationType(),
+          authenticationHandler.getClass().getSimpleName());
     }
   }
 
@@ -100,7 +99,7 @@ public class WebSSOFilter implements SecurityFilter {
 
     final String path = httpRequest.getRequestURI();
 
-    LOGGER.debug("Handling request for path {}", path);
+    LOGGER.debug("Handling request for path {}", LogSanitizer.cleanAndEncode(path));
 
     boolean isWhiteListed = false;
 
@@ -111,7 +110,7 @@ public class WebSSOFilter implements SecurityFilter {
     if (isWhiteListed) {
       LOGGER.debug(
           "Context of {} has been whitelisted, adding a NO_AUTH_POLICY attribute to the header.",
-          path);
+          LogSanitizer.cleanAndEncode(path));
       servletRequest.setAttribute(ContextPolicy.NO_AUTH_POLICY, true);
       filterChain.doFilter(httpRequest, httpResponse);
     } else {
@@ -119,7 +118,7 @@ public class WebSSOFilter implements SecurityFilter {
       servletRequest.setAttribute(ContextPolicy.NO_AUTH_POLICY, null);
 
       // now handle the request and set the authentication token
-      LOGGER.debug("Handling request for {}.", path);
+      LOGGER.debug("Handling request for {}.", LogSanitizer.cleanAndEncode(path));
       handleRequest(httpRequest, httpResponse, filterChain, getHandlerList(path));
     }
   }
@@ -254,8 +253,8 @@ public class WebSSOFilter implements SecurityFilter {
           if (!contextPolicyManager.getGuestAccess()) {
             LOGGER.warn(
                 "No handlers were able to determine required credentials, returning bad request to {}. Check policy configuration for path: {}",
-                ipAddress,
-                path);
+                LogSanitizer.cleanAndEncode(ipAddress),
+                LogSanitizer.cleanAndEncode(path));
             returnSimpleResponse(HttpServletResponse.SC_BAD_REQUEST, httpResponse);
             throw new AuthenticationFailureException(
                 "No handlers were able to determine required credentials");
@@ -267,8 +266,8 @@ public class WebSSOFilter implements SecurityFilter {
           if (result.getToken() == null) {
             LOGGER.warn(
                 "Completed without credentials for {} - check context policy configuration for path: {}",
-                ipAddress,
-                path);
+                LogSanitizer.cleanAndEncode(ipAddress),
+                LogSanitizer.cleanAndEncode(path));
             returnSimpleResponse(HttpServletResponse.SC_BAD_REQUEST, httpResponse);
             throw new AuthenticationFailureException("Completed without credentials");
           }
@@ -284,15 +283,15 @@ public class WebSSOFilter implements SecurityFilter {
         default:
           LOGGER.warn(
               "Unexpected response from handler - ignoring. Remote IP: {}, Path: {}",
-              ipAddress,
-              path);
+              LogSanitizer.cleanAndEncode(ipAddress),
+              LogSanitizer.cleanAndEncode(path));
           throw new AuthenticationFailureException("Unexpected response from handler");
       }
     } else {
       LOGGER.warn(
           "Expected login credentials from {} - didn't find any. Returning a bad request for path: {}",
-          ipAddress,
-          path);
+          LogSanitizer.cleanAndEncode(ipAddress),
+          LogSanitizer.cleanAndEncode(path));
       returnSimpleResponse(HttpServletResponse.SC_BAD_REQUEST, httpResponse);
       throw new AuthenticationFailureException("Didn't find any login credentials");
     }

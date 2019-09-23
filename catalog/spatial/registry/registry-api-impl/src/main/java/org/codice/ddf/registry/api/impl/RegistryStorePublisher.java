@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.registry.api.internal.RegistryStore;
 import org.codice.ddf.registry.common.metacard.RegistryUtility;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
@@ -169,8 +170,8 @@ public class RegistryStorePublisher implements EventHandler {
           } catch (Exception e) {
             LOGGER.debug(
                 "Failed to {} registry configuration to {}",
-                publish,
-                ((RegistryStoreImpl) registryStore).getId());
+                LogSanitizer.cleanAndEncode(publish),
+                LogSanitizer.cleanAndEncode(((RegistryStoreImpl) registryStore).getId()));
           }
         },
         3,

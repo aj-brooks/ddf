@@ -92,6 +92,11 @@
             <artifactId>geospatial</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <resources>
@@ -115,7 +120,8 @@
                             spatial-ogc-common,
                             spatial-wfs-converter;scope=compile|runtime,
                             catalog-core-api-impl,
-                            geospatial
+                            geospatial,
+                            log-sanitizer
                         </Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
                     </instructions>

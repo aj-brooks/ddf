@@ -70,6 +70,7 @@ import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import org.codice.ddf.cxf.client.ClientFactoryFactory;
 import org.codice.ddf.cxf.client.SecureCxfClientFactory;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.codice.ddf.security.OcspService;
 import org.codice.ddf.system.alerts.NoticePriority;
 import org.codice.ddf.system.alerts.SystemNotice;
@@ -120,7 +121,7 @@ public class OcspChecker implements OcspService {
           SecurityLogger.audit(
               "Certificate {} has been revoked by the OCSP server at URL {}.",
               cert,
-              revokedStatusUrl);
+              LogSanitizer.cleanAndEncode(revokedStatusUrl));
           LOGGER.warn(
               "Certificate {} has been revoked by the OCSP server at URL {}.",
               cert,

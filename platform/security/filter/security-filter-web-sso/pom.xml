@@ -52,7 +52,11 @@
             <artifactId>pax-web-api</artifactId>
             <version>${pax.web.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -62,6 +66,9 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Embed-Dependency>
+                            log-sanitizer
+                        </Embed-Dependency>
                     </instructions>
                 </configuration>
             </plugin>

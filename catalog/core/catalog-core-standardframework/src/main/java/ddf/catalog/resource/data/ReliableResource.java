@@ -24,6 +24,7 @@ import javax.activation.MimeType;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,7 +97,7 @@ public class ReliableResource implements Resource, Serializable {
     try {
       return getProduct();
     } catch (IOException e) {
-      LOGGER.info("Could not retrieve file [{}]", filePath, e);
+      LOGGER.info("Could not retrieve file [{}]", LogSanitizer.cleanAndEncode(filePath), e);
       return null;
     }
   }
@@ -105,7 +106,7 @@ public class ReliableResource implements Resource, Serializable {
     if (filePath == null) {
       return null;
     }
-    LOGGER.info("filePath = {}", filePath);
+    LOGGER.info("filePath = {}", LogSanitizer.cleanAndEncode(filePath));
     return FileUtils.openInputStream(new File(filePath));
   }
 
@@ -137,7 +138,7 @@ public class ReliableResource implements Resource, Serializable {
 
   @Override
   public long getSize() {
-    LOGGER.debug("getting size = {}", size);
+    LOGGER.debug("getting size = {}", LogSanitizer.cleanAndEncode(Long.toString(size)));
     return size;
   }
 

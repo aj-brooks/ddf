@@ -336,6 +336,11 @@
             <version>${hamcrest-optional.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -357,7 +362,8 @@
                             versioning-common,
                             catalog-core-api-impl;scope=!test,
                             lux,
-                            Saxon-HE
+                            Saxon-HE,
+                            log-sanitizer
                         </Embed-Dependency>
                         <Export-Package>
                             ddf.catalog.cache,

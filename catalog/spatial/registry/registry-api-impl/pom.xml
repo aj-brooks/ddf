@@ -207,6 +207,11 @@
             <artifactId>geospatial</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ddf.lib</groupId>
+            <artifactId>log-sanitizer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -249,7 +254,8 @@
                             platform-util-unavailableurls,
                             jaxb2-basics-runtime,
                             commons-lang3,
-                            geospatial
+                            geospatial,
+                            log-sanitizer
                         </Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
                     </instructions>

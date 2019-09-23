@@ -20,6 +20,7 @@ import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
 import org.codice.ddf.catalog.ui.metacard.workspace.WorkspaceMetacardImpl;
 import org.codice.ddf.catalog.ui.query.monitor.api.QueryUpdateSubscriber;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +48,12 @@ public class QueryUpdateSubscriberList implements QueryUpdateSubscriber {
           try {
             subscriber.notify(workspaceMetacardMap);
           } catch (RuntimeException e) {
-            LOGGER.warn("QueryUpdateSubscriber failed to run: subscriber={}", subscriber, e);
+            if (LOGGER.isWarnEnabled()) {
+              LOGGER.warn(
+                  "QueryUpdateSubscriber failed to run: subscriber={}",
+                  LogSanitizer.cleanAndEncode(subscriber.toString()),
+                  e);
+            }
           }
         });
   }

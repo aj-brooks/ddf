@@ -28,6 +28,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.codice.ddf.catalog.resource.download.DownloadToLocalSiteException;
 import org.codice.ddf.catalog.resource.download.ResourceDownloadMBean;
+import org.codice.ddf.log.sanitizer.LogSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,8 +90,8 @@ public class ResourceDownloadActionEndpoint {
     try {
       LOGGER.debug(
           "Downloading resource associated with metacard id [{}] from source [{}] to the local site.",
-          metacardId,
-          sourceId);
+          LogSanitizer.cleanAndEncode(metacardId),
+          LogSanitizer.cleanAndEncode(sourceId));
       resourceDownloadMBean.copyToLocalSite(sourceId, metacardId);
       return Response.ok(generateHtmlResponse(SUCCESS_MESSAGE)).build();
     } catch (MBeanException e) {
