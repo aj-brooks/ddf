@@ -29,6 +29,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.common.util.CollectionUtils;
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.jaxrs.client.ResponseExceptionMapper;
+import org.apache.cxf.jaxrs.impl.ResponseImpl;
 import org.apache.cxf.jaxrs.provider.JAXBElementProvider;
 import org.codice.ddf.spatial.ogc.csw.catalog.common.CswException;
 import org.slf4j.Logger;
@@ -83,6 +84,15 @@ public class CswResponseExceptionMapper implements ResponseExceptionMapper<CswEx
           LOGGER.debug("Unable to parse exception report: {}", e);
         }
         if (msg != null) {
+          if (msg.length() == 0) {
+            String faultString =
+                ((ResponseImpl) response)
+                    .getOutMessage()
+                    .getExchange()
+                    .getInMessage()
+                    .getContent(String.class);
+            return new CswException(faultString);
+          }
           try {
             JAXBElementProvider<ExceptionReport> provider = new JAXBElementProvider<>();
             Unmarshaller um =
