@@ -241,6 +241,7 @@ Query.Model = PartialAssociatedModel.extend({
   },
   buildSearchData() {
     const data = this.toJSON()
+    console.log(data)
 
     switch (data.federation) {
       case 'local':
@@ -271,7 +272,8 @@ Query.Model = PartialAssociatedModel.extend({
       'sorts',
       'id',
       'spellcheck',
-      'phonetics'
+      'phonetics',
+      'cacheId'
     )
   },
   isOutdated() {
